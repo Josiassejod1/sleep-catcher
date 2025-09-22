@@ -1,13 +1,23 @@
+import {
+    addDoc,
+    collection,
+    doc,
+    limit as firestoreLimit,
+    getDocs,
+    query,
+    updateDoc,
+    where
+} from 'firebase/firestore';
 import { firebaseFirestore } from '../config/firebase';
 import { ChartData, SleepLog } from '../types';
 
 class SleepLogService {
-  private collection = firebaseFirestore.collection('sleepLogs');
+  private collectionRef = collection(firebaseFirestore, 'sleepLogs');
 
   // Create a new sleep log
   async createSleepLog(sleepLog: Omit<SleepLog, 'id' | 'createdAt'>): Promise<SleepLog> {
     try {
-      const docRef = await this.collection.add({
+      const docRef = await addDoc(this.collectionRef, {
         ...sleepLog,
         createdAt: new Date(),
       });
@@ -28,7 +38,8 @@ class SleepLogService {
   // Update an existing sleep log
   async updateSleepLog(id: string, updates: Partial<SleepLog>): Promise<void> {
     try {
-      await this.collection.doc(id).update({
+      const docRef = doc(firebaseFirestore, 'sleepLogs', id);
+      await updateDoc(docRef, {
         ...updates,
         updatedAt: new Date(),
       });
@@ -41,20 +52,22 @@ class SleepLogService {
   // Get sleep log by date for a specific user
   async getSleepLogByDate(userId: string, date: string): Promise<SleepLog | null> {
     try {
-      const snapshot = await this.collection
-        .where('userId', '==', userId)
-        .where('date', '==', date)
-        .limit(1)
-        .get();
+      const q = query(
+        this.collectionRef,
+        where('userId', '==', userId),
+        where('date', '==', date),
+        firestoreLimit(1)
+      );
+      const snapshot = await getDocs(q);
 
       if (snapshot.empty) {
         return null;
       }
 
-      const doc = snapshot.docs[0];
+      const docSnap = snapshot.docs[0];
       return {
-        id: doc.id,
-        ...doc.data(),
+        id: docSnap.id,
+        ...docSnap.data(),
       } as SleepLog;
     } catch (error) {
       console.error('Error getting sleep log by date:', error);

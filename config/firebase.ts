@@ -1,6 +1,7 @@
-import { getApps, initializeApp } from '@react-native-firebase/app';
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
+import { getApps, initializeApp } from 'firebase/app';
+import { getAuth, initializeAuth, getReactNativePersistence } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -14,9 +15,6 @@ const firebaseConfig = {
   storageBucket: 'sleep-catcher.firebasestorage.app',
   messagingSenderId: '894695797365',
   appId: '1:894695797365:ios:a18298a66fbcefd307be3c',
-  // iOS specific configuration
-  iosBundleId: 'com.dalvindigital.sleep',
-  iosAppId: '1:894695797365:ios:a18298a66fbcefd307be3c',
 };
 
 // Initialize Firebase only if no apps exist
@@ -27,9 +25,26 @@ if (getApps().length === 0) {
   firebaseApp = getApps()[0];
 }
 
-// Export Firebase services
-export { firebaseApp };
-export const firebaseAuth = auth();
-export const firebaseFirestore = firestore();
+// Initialize Auth with AsyncStorage persistence for React Native
+let firebaseAuth;
+try {
+  firebaseAuth = initializeAuth(firebaseApp, {
+    persistence: getReactNativePersistence(AsyncStorage)
+  });
+} catch (error) {
+  // If auth is already initialized, get the existing instance
+  firebaseAuth = getAuth(firebaseApp);
+}
 
+// Initialize Firestore
+let firebaseFirestore;
+try {
+  firebaseFirestore = getFirestore(firebaseApp);
+} catch (error) {
+  console.warn('Firestore initialization failed:', error);
+  firebaseFirestore = null;
+}
+
+// Export Firebase services
+export { firebaseApp, firebaseAuth, firebaseFirestore };
 export default firebaseApp;

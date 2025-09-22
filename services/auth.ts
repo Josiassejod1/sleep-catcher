@@ -1,3 +1,16 @@
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  signOut,
+  updateProfile
+} from 'firebase/auth';
+import {
+  doc,
+  getDoc,
+  setDoc
+} from 'firebase/firestore';
 import { firebaseAuth, firebaseFirestore } from '../config/firebase';
 import { User } from '../types';
 
@@ -9,11 +22,11 @@ class AuthService {
   // Email/Password Authentication
   async signUpWithEmail(email: string, password: string, displayName?: string): Promise<User> {
     try {
-      const userCredential = await firebaseAuth.createUserWithEmailAndPassword(email, password);
+      const userCredential = await createUserWithEmailAndPassword(firebaseAuth, email, password);
       const firebaseUser = userCredential.user;
 
-      if (displayName && firebaseUser.updateProfile) {
-        await firebaseUser.updateProfile({ displayName });
+      if (displayName) {
+        await updateProfile(firebaseUser, { displayName });
       }
 
       const user: User = {
@@ -25,7 +38,7 @@ class AuthService {
       };
 
       // Create user document in Firestore
-      await firebaseFirestore.collection('users').doc(firebaseUser.uid).set(user);
+      await setDoc(doc(firebaseFirestore, 'users', firebaseUser.uid), user);
 
       return user;
     } catch (error) {
@@ -36,11 +49,12 @@ class AuthService {
 
   async signInWithEmail(email: string, password: string): Promise<User> {
     try {
-      const userCredential = await firebaseAuth.signInWithEmailAndPassword(email, password);
+      const userCredential = await signInWithEmailAndPassword(firebaseAuth, email, password);
       const firebaseUser = userCredential.user;
 
       // Get user data from Firestore
-      const userDoc = await firebaseFirestore.collection('users').doc(firebaseUser.uid).get();
+      const userDocRef = doc(firebaseFirestore, 'users', firebaseUser.uid);
+      const userDoc = await getDoc(userDocRef);
       
       if (userDoc.exists()) {
         return userDoc.data() as User;
@@ -53,7 +67,7 @@ class AuthService {
           isPremium: false,
           createdAt: new Date(),
         };
-        await firebaseFirestore.collection('users').doc(firebaseUser.uid).set(user);
+        await setDoc(userDocRef, user);
         return user;
       }
     } catch (error) {
@@ -84,7 +98,7 @@ class AuthService {
   // Sign out
   async signOut(): Promise<void> {
     try {
-      await firebaseAuth.signOut();
+      await signOut(firebaseAuth);
     } catch (error) {
       console.error('Sign out error:', error);
       throw error;
@@ -107,10 +121,11 @@ class AuthService {
 
   // Auth state change listener
   onAuthStateChanged(callback: (user: User | null) => void) {
-    return firebaseAuth.onAuthStateChanged(async (firebaseUser) => {
+    return onAuthStateChanged(firebaseAuth, async (firebaseUser) => {
       if (firebaseUser) {
         try {
-          const userDoc = await firebaseFirestore.collection('users').doc(firebaseUser.uid).get();
+          const userDocRef = doc(firebaseFirestore, 'users', firebaseUser.uid);
+          const userDoc = await getDoc(userDocRef);
           if (userDoc.exists()) {
             callback(userDoc.data() as User);
           } else {
@@ -129,7 +144,7 @@ class AuthService {
   // Reset password
   async resetPassword(email: string): Promise<void> {
     try {
-      await firebaseAuth.sendPasswordResetEmail(email);
+      await sendPasswordResetEmail(firebaseAuth, email);
     } catch (error) {
       console.error('Reset password error:', error);
       throw error;

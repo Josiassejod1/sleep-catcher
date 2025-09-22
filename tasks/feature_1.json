@@ -1,0 +1,56 @@
+{
+    "version": "1.0",
+    "tasks": [
+      {
+        "id": "snore-1",
+        "title": "Add Snore Tracking Settings",
+        "description": "Create a settings toggle for enabling/disabling snore tracking. Make feature opt-in only.",
+        "acceptanceCriteria": [
+          "User can enable/disable Snore Tracking from settings",
+          "Default is disabled until explicitly enabled",
+          "Permission request for microphone shown when enabling"
+        ]
+      },
+      {
+        "id": "snore-2",
+        "title": "Implement Overnight Audio Recording",
+        "description": "Use device microphone to record audio overnight. Trigger short recordings when noise exceeds threshold.",
+        "acceptanceCriteria": [
+          "Audio recording session can start/stop manually",
+          "Recording automatically starts if bedtime reminder and feature enabled",
+          "Only short clips (5–20s) are stored, not continuous 8-hour recording"
+        ]
+      },
+      {
+        "id": "snore-3",
+        "title": "Snore Event Detection",
+        "description": "Analyze audio clips for snoring patterns using frequency/amplitude analysis.",
+        "acceptanceCriteria": [
+          "FFT or classifier detects snore vs non-snore",
+          "Snore events tagged with intensity: low, medium, high",
+          "Non-snore noise (talking, movement) ignored"
+        ]
+      },
+      {
+        "id": "snore-4",
+        "title": "Store Snore Metadata",
+        "description": "Save snore event metadata in Firestore. Store audio clips locally with option to upload if Premium enabled.",
+        "acceptanceCriteria": [
+          "Firestore schema: id, userId, date, startTime, durationSeconds, intensity, clipUrl (optional)",
+          "Clips saved locally by default",
+          "Premium users can upload clips to cloud storage (Firebase Storage)"
+        ]
+      },
+      {
+        "id": "snore-5",
+        "title": "Session Management",
+        "description": "Allow starting/stopping snore tracking session manually or automatically at bedtime.",
+        "acceptanceCriteria": [
+          "Manual start/stop works",
+          "Automatic start at bedtime reminder if feature enabled",
+          "Session ends when user wakes or stops manually"
+        ]
+      }
+    ]
+  }
+  
