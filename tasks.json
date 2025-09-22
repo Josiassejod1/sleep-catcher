@@ -1,0 +1,128 @@
+{
+  "version": "1.0",
+  "tasks": [
+    {
+      "id": "task-1",
+      "title": "Setup React Native Project",
+      "description": "Initialize a new React Native app (Expo recommended). Install Firebase, RevenueCat, charting, and health libraries.",
+      "acceptanceCriteria": [
+        "New RN project runs on iOS & Android",
+        "Firebase, RevenueCat, charting, and health packages installed"
+      ]
+    },
+    {
+      "id": "task-2",
+      "title": "Firebase Auth Integration",
+      "description": "Implement authentication using Firebase (Email, Google, Apple sign-in).",
+      "acceptanceCriteria": [
+        "User can sign in with Email",
+        "User can sign in with Google/Apple",
+        "Auth state persists across app restarts"
+      ]
+    },
+    {
+      "id": "task-3",
+      "title": "Firestore Data Model",
+      "description": "Create Firestore collections for sleep logs with required fields.",
+      "acceptanceCriteria": [
+        "SleepLog collection created with fields: id, userId, date, score, hours, bedtime, wakeTime, journal, prompt, createdAt",
+        "Logs queryable by date & user"
+      ]
+    },
+    {
+      "id": "task-4",
+      "title": "Morning Log Screen",
+      "description": "Build UI for daily sleep log with score, hours, and health sync.",
+      "acceptanceCriteria": [
+        "Slider (1–5) for mood score",
+        "Number input for hours slept",
+        "Autofill bedtime/wake time from Health data if available",
+        "Save button writes log to Firestore"
+      ]
+    },
+    {
+      "id": "task-5",
+      "title": "AI Reflection Prompt",
+      "description": "Generate daily reflection prompts using OpenAI API, store journal entries.",
+      "acceptanceCriteria": [
+        "Prompt changes based on score (1–2 stress, 3 neutral, 4–5 gratitude)",
+        "User can write a journal entry (free: 100-word limit)",
+        "Journal saved with log in Firestore"
+      ]
+    },
+    {
+      "id": "task-6",
+      "title": "Weekly Trends Chart",
+      "description": "Display past 7 days of mood scores and hours slept.",
+      "acceptanceCriteria": [
+        "Line chart overlays mood score and hours slept",
+        "Tooltips display on tap",
+        "Free users limited to 7 days of history"
+      ]
+    },
+    {
+      "id": "task-7",
+      "title": "Apple Health / Google Fit Sync",
+      "description": "Integrate with health APIs to pull sleep data.",
+      "acceptanceCriteria": [
+        "iOS: `react-native-health` integration",
+        "Android: `react-native-google-fit` integration",
+        "Pull bedtime/wake time if available",
+        "Fallback to manual input"
+      ]
+    },
+    {
+      "id": "task-8",
+      "title": "RevenueCat Setup",
+      "description": "Integrate RevenueCat for subscription management.",
+      "acceptanceCriteria": [
+        "Products created in App Store & Play Console",
+        "Entitlement `premium` created in RevenueCat",
+        "App checks entitlement on launch"
+      ]
+    },
+    {
+      "id": "task-9",
+      "title": "Paywall Screen",
+      "description": "Implement paywall to upsell Premium features.",
+      "acceptanceCriteria": [
+        "Shows Premium benefits list",
+        "CTA for monthly/yearly subscription",
+        "Triggers RevenueCat purchase flow"
+      ]
+    },
+    {
+      "id": "task-10",
+      "title": "Gating Premium Features",
+      "description": "Restrict premium features to active subscribers.",
+      "acceptanceCriteria": [
+        "Export reports gated",
+        "Journals >100 words gated",
+        "History beyond 7 days gated",
+        "AI insights gated",
+        "Custom reminders gated"
+      ]
+    },
+    {
+      "id": "task-11",
+      "title": "Doctor Report Export",
+      "description": "Allow Premium users to export sleep data as PDF/CSV.",
+      "acceptanceCriteria": [
+        "User selects date range",
+        "PDF includes averages, charts, AI insights, optional journals",
+        "CSV export available",
+        "Can share via Save to Files or Email"
+      ]
+    },
+    {
+      "id": "task-12",
+      "title": "Notifications & Reminders",
+      "description": "Implement push notifications for daily logs and bedtime reminders.",
+      "acceptanceCriteria": [
+        "Morning reminder: 'Log your sleep 🌅'",
+        "Premium users can add multiple reminders",
+        "Notifications scheduled locally on device"
+      ]
+    }
+  ]
+}
