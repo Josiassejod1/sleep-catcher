@@ -4,14 +4,19 @@ import firestore from '@react-native-firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
-  // Add your Firebase config here
-  // You'll need to replace these with your actual Firebase project credentials
-  apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
+  // Sleep Catcher Firebase project credentials
+  // App nickname: Sleep Catcher
+  // Bundle ID: com.dalvindigital.sleep
+  // iOS App ID: 1:894695797365:ios:a18298a66fbcefd307be3c
+  apiKey: 'AIzaSyAyqD0aFfJs5iVRTQJI02Rd137voDVke-I',
+  authDomain: 'sleep-catcher.firebaseapp.com',
+  projectId: 'sleep-catcher',
+  storageBucket: 'sleep-catcher.firebasestorage.app',
+  messagingSenderId: '894695797365',
+  appId: '1:894695797365:ios:a18298a66fbcefd307be3c',
+  // iOS specific configuration
+  iosBundleId: 'com.dalvindigital.sleep',
+  iosAppId: '1:894695797365:ios:a18298a66fbcefd307be3c',
 };
 
 // Initialize Firebase only if no apps exist
